@@ -13,11 +13,11 @@
         <option *ngFor="let item of usersArray" [value]="item[0]">{{item[1]}} </option>
     </select>
 
-    <button (click)="addName()" type="button" id="name"
+    <button on-click="addName()" type="button" id="name"
         class=" p-2 text-xs font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
         Войти
     </button>
-    <button (click)="invatePlayer()" id="invate" type="button"
+    <button on-click="invatePlayer()" id="invate" type="button"
         class="p-2  text-xs font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
         Пригласить 
     </button>
