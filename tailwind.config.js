@@ -10,10 +10,7 @@ module.exports = {
     extend: {width: {
       '120': '30rem',
     }},
-    screens: {
-      'tablet': '640px',
-      
-    },
+   
   },
   plugins: ['flowbite/plugin'],
 }
