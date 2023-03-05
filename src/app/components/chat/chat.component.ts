@@ -1,5 +1,4 @@
 import { Component, Output, EventEmitter, ViewChild, ElementRef, Input } from '@angular/core';
-import { TimeInterval } from 'rxjs/internal/operators/timeInterval';
 import { io, Socket } from "socket.io-client";
 
 @Component({
@@ -94,9 +93,7 @@ export class ChatComponent {
               this.playChange.emit(true);
               this.shotChange.emit(false);
               this.onMoveChange.emit('Стреляет противник');
-              let elnt: any = document.getElementById('enamy');
-              elnt.innerText = 'Противник :' + this.enemyName;
-            } else if (response.status !== 'ok' && this.acceptDialog === '1') {
+              } else if (response.status !== 'ok' && this.acceptDialog === '1') {
               this.block = false;
               alert(response.status);
             }
@@ -113,8 +110,6 @@ export class ChatComponent {
         this.enemyName = this.usersObj[id];
         this.onMoveChange.emit('Ваш выстрел');
         this.shotChange.emit(true);
-        let elnt: any = document.getElementById('enamy');
-        elnt.innerText = 'Противник :' + this.enemyName;
         alert(this.enemyName + ' принял ваш запрос');
       } else if (acceptDialog === '2') {
         clearInterval(this.intv);

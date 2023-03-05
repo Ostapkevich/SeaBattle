@@ -127,7 +127,7 @@ export class AppComponent implements AfterViewInit {
     for (const ship of this.ships) {
       this.changeShipStyle(ship, 'colorShip');
     }
-   
+   this.squere1Element.addEventListener('mouseover',this.mouseOver_boderShip.bind(this));
     this.squere1Element.addEventListener('click', this.mouseClick_SelectShip.bind(this));
     this.squere2Element.addEventListener('click', this.shot.bind(this));
     this.squere1Element.addEventListener('mouseover', this.mouseOver_moveShip.bind(this));
