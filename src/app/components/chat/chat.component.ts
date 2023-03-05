@@ -253,7 +253,6 @@ export class ChatComponent {
           this.onMyName.emit(this.myName + '🟢');
         } else {
           alert(response.status);
-          alert(response.status)
         }
       });
     }
