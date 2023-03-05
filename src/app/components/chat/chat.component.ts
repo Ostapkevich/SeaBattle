@@ -93,7 +93,7 @@ export class ChatComponent {
               this.playChange.emit(true);
               this.shotChange.emit(false);
               this.onMoveChange.emit('Стреляет противник');
-              } else if (response.status !== 'ok' && this.acceptDialog === '1') {
+            } else if (response.status !== 'ok' && this.acceptDialog === '1') {
               this.block = false;
               alert(response.status);
             }
@@ -240,13 +240,10 @@ export class ChatComponent {
   }
 
   addName() {
-    
+
     if (this.inpName.nativeElement.disabled === false && this.inpName.nativeElement.value !== '') {
-      alert(this.socket.id)
-      
       this.socket.emit('createNewUser', this.myName, (response: { status: string }, users: Object) => {
         if (response.status === "ok") {
-          alert('ok')
           Object.assign(this.usersObj, users);
           this.updateUsersArray();
           this.inpName.nativeElement.disabled = true;
