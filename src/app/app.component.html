@@ -33,12 +33,12 @@
         </button>
       </div>
       <p class="text-xl  lg:text-3xl text-gray-900 dark:text-white ">{{messageAction}}</p>
-      <p id="timeOver" class="self-end text-lg lg:text-2xl text-gray-900 dark:text-white">8/20</p>
+      <p id="timeOver" class="self-end text-lg lg:text-2xl text-gray-900 dark:text-white"></p>
     </div>
 
   </div>
 
-  <chat #chatTag class="mt-2 w-1/2 lg:w-1/4  mr-1 sm:mr-4 md:mr-6 lg:mr-8 xl:mr-10 2xl:mr-12 self-center"   (onMyName)="setName($event)" [chatDesc]="desk" [(play)]="play" [(onMove)]="messageAction "
+  <chat #chatTag class="mt-2 w-full lg:w-1/4 px-8 sm:px-8 md:px-20 lg:px-0 lg:mr-8 xl:mr-10 2xl:mr-12 self-center"   (onMyName)="setName($event)" [chatDesc]="desk" [(play)]="play" [(onMove)]="messageAction "
     [(shot)]="canShot">
   </chat>
 
