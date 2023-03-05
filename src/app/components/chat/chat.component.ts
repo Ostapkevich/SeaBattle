@@ -240,10 +240,11 @@ export class ChatComponent {
   }
 
   addName() {
-    alert('sfdfsd');
-    /* if (this.inpName.nativeElement.disabled === false && this.inpName.nativeElement.value !== '') {
+    
+    if (this.inpName.nativeElement.disabled === false && this.inpName.nativeElement.value !== '') {
       this.socket.emit('createNewUser', this.myName, (response: { status: string }, users: Object) => {
         if (response.status === "ok") {
+          alert('ok')
           Object.assign(this.usersObj, users);
           this.updateUsersArray();
           this.inpName.nativeElement.disabled = true;
@@ -252,7 +253,7 @@ export class ChatComponent {
           alert(response.status);
         }
       });
-    } */
+    }
   }
 
   inpNameEnter(event: KeyboardEvent) {
