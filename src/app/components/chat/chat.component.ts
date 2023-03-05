@@ -242,6 +242,8 @@ export class ChatComponent {
   addName() {
     
     if (this.inpName.nativeElement.disabled === false && this.inpName.nativeElement.value !== '') {
+      alert(this.socket.io)
+      
       this.socket.emit('createNewUser', this.myName, (response: { status: string }, users: Object) => {
         if (response.status === "ok") {
           alert('ok')
@@ -251,6 +253,7 @@ export class ChatComponent {
           this.onMyName.emit(this.myName + '🟢');
         } else {
           alert(response.status);
+          alert(response.status)
         }
       });
     }
