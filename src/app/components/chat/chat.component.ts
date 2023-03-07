@@ -21,7 +21,7 @@ export class ChatComponent {
   myName: string = ''; // имя игрока 
   enemyName = ''; //имя выбранного врага для отображения в шаблоне HTML
   enemyId = ''; //id выбранного врага
-  messageTo = '' // для отображения в шаблоне HTML кому пишется сообщение
+  messageTo = ''; // для отображения в шаблоне HTML кому пишется сообщение
   block = false;//используется для блокировок во время приглашения к игре
   answer = false;// был ли дан ответ в окне приглашения в течении определенного вреени
   timeInvite = "";
@@ -277,9 +277,9 @@ export class ChatComponent {
         this.intv = setInterval(() => {
           if (i < 40) {
             if (i < 10) {
-              this.timeInvite = `Ожидание ответа - 0${i} сек.`;
+              this.timeInvite = `Ожидание - 0${i} сек.`;
             } else {
-              this.timeInvite = `Ожидание ответа - ${i} сек.`;
+              this.timeInvite = `Ожидание - ${i} сек.`;
             }
           } else {
             clearInterval(this.intv);
@@ -343,9 +343,6 @@ export class ChatComponent {
 
   changePlayer() {
     this.playerSelectElnt = this.slctPlayer.nativeElement;
-    this.messageTo = 'к ' + this.playerSelectElnt.item(this.playerSelectElnt.selectedIndex)?.innerHTML;
+    this.messageTo =' '+this.playerSelectElnt.item(this.playerSelectElnt.selectedIndex)?.innerHTML;
   }
-
-
-
 }
