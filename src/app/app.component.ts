@@ -62,9 +62,6 @@ export class AppComponent implements AfterViewInit {
   tempDirection = '';
   returnedShipId: number[] = [];  // координата бегин при первом клике, нужна для возврата, если нажмется escape
   returnedDirection = '';
-  falseMoveShip: Ship | undefined; // для отображения контура корабля в месте, куда нельзя перемещать
-  falseRotateShip: Ship | undefined;
-
   outOfShips: Array<Array<number>> = [];
   outOfPerimetr: Array<Array<number>> = [];
   play: boolean = false;
@@ -186,14 +183,14 @@ export class AppComponent implements AfterViewInit {
           elem.style.backgroundColor = '#0ea5e9';
           break;
         case 'selectBorder':
-          elem.style.borderColor = 'rgb(250 204 21'
+          elem.style.borderColor = 'rgb(250 204 21)'
           elem.style.borderWidth = '3px';
           break;
         case 'unselectBorder':
           elem.style.borderWidth = '';
           break;
         case 'selectBorderFalse':
-          elem.style.borderColor = 'blue'
+          elem.style.borderColor = 'rgb(150,0,0)'
           elem.style.borderWidth = '3px';
           break;
       }
@@ -256,14 +253,6 @@ export class AppComponent implements AfterViewInit {
 
   mouseOver_moveShip(event: any) {
     if (this.play === false && this.moving && event.target.getAttribute('id') !== 'shipsField') {
-      if (this.falseRotateShip !== undefined) {
-        this.changeShipStyle(this.falseRotateShip, 'unselectBorder');
-        this.falseMoveShip = undefined;
-      }
-      if (this.falseMoveShip !== undefined) {
-        this.changeShipStyle(this.falseMoveShip, 'unselectBorder');
-        this.falseMoveShip=undefined;
-      }
       let id: string = event.target.getAttribute('id');
       let target: number[] = [+id[1], +id[2]];
       const ship = this.getShipById(this.trackingShipId);
@@ -276,29 +265,12 @@ export class AppComponent implements AfterViewInit {
         this.trackingStartPoint[0] = target[0];
         this.trackingStartPoint[1] = target[1];
         this.changeShipStyle(ship, 'colorSelectedShip');
-      } else {
-        if (zone.perimetrZone === false) {
-          this.falseMoveShip = new Ship(ship.shipCount, 'c' + this.tempShipId[0] + this.tempShipId[1]);
-          this.falseMoveShip.direction=ship.direction;
-          this.changeShipStyle(this.falseMoveShip, 'selectBorderFalse');
-        } else {
-          if (this.falseMoveShip) {
-            this.changeShipStyle(this.falseMoveShip, 'selectBorderFalse');
-          }
-        }
       }
     }
   }
 
   rotate() {
     if (this.play === false && this.moving) {
-      if (this.falseMoveShip !== undefined) {
-        this.changeShipStyle(this.falseMoveShip, 'unselectBorder');
-        this.falseMoveShip = undefined;
-      }
-      if (this.falseRotateShip) {
-        this.changeShipStyle(this.falseRotateShip, 'unselectBorder');
-      }
       const ship = this.getShipById(this.trackingShipId);
       let zone = this.IsIncludeShipZone(this.trackingShipId, 'rotate');
       if (zone.perimetrZone === false && zone.shipZone === false) {
@@ -308,24 +280,6 @@ export class AppComponent implements AfterViewInit {
         ship.shipId = 'c' + this.tempShipId[0] + this.tempShipId[1];
         ship.direction = this.tempDirection;
         this.changeShipStyle(ship, 'colorSelectedShip');
-        this.falseRotateShip = undefined;
-      } else {
-        if (zone.perimetrZone === false) {
-          if (this.falseRotateShip !== undefined) {
-            if (this.falseRotateShip.direction === 'hor') {
-              this.falseRotateShip.direction = 'ver';
-            } else {
-              this.falseRotateShip.direction === 'hor';
-            }
-            this.changeShipStyle(this.falseRotateShip, 'unselectBorder');
-            this.falseRotateShip = undefined;
-          } else {
-            this.falseRotateShip = new Ship(ship.shipCount, 'c' + this.tempShipId[0] + this.tempShipId[1]);
-            this.falseRotateShip.direction = this.tempDirection;
-            this.changeShipStyle(this.falseRotateShip, 'selectBorderFalse');
-          }
-
-        }
       }
     }
   }
