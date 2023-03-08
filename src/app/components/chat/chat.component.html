@@ -11,7 +11,7 @@
         <option *ngFor="let item of usersArray" [value]="item[0]">{{item[1]}} </option>
     </select>
 
-    <button (click)="addName()" type="button" id="name"
+    <button (click)="createUser()" type="button" id="name"
         class="order-7 lg:order-4 text-xs font-medium text-center p-1.5 text-white bg-blue-700 rounded-lg  focus:ring-4 focus:outline-none  dark:bg-blue-600 hover:bg-blue-700 focus:ring-blue-800">
         Войти
     </button>
