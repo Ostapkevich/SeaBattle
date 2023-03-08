@@ -241,10 +241,7 @@ export class ChatComponent {
 
   createUser() {
     if (this.inpName.nativeElement.disabled === false && this.inpName.nativeElement.value !== '') {
-      alert('1')
-      
       this.socket.emit('createNewUser', this.myName, (response: { status: string }, users: Object) => {
-        alert('2')
         if (response.status === "ok") {
           Object.assign(this.usersObj, users);
           this.updateUsersArray();
@@ -345,6 +342,6 @@ export class ChatComponent {
 
   changePlayer() {
     this.playerSelectElnt = this.slctPlayer.nativeElement;
-    this.messageTo =' '+this.playerSelectElnt.item(this.playerSelectElnt.selectedIndex)?.innerHTML;
+    this.messageTo = ' ' + this.playerSelectElnt.item(this.playerSelectElnt.selectedIndex)?.innerHTML;
   }
 }
