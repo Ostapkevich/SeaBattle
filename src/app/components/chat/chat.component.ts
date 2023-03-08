@@ -151,7 +151,7 @@ export class ChatComponent {
         this.playChange.emit(false);
         this.onMyName.emit(this.myName + '🟢');
         this.socket.emit('mePlayMarkFalse');
-        this.onMoveChange.emit('Расставте корабли');
+        this.onMoveChange.emit('Расставьте корабли');
         alert('Противник покинул игру.')
       }
 

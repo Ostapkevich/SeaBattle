@@ -68,7 +68,7 @@ export class AppComponent implements AfterViewInit {
   canShot!: boolean;
 
   //******* игра************
-  messageAction = 'Расставте корабли';
+  messageAction = 'Расставьте корабли';
   desk: boolean = true
 
   @ViewChild("square1", { static: false })
@@ -602,7 +602,7 @@ export class AppComponent implements AfterViewInit {
         el.innerHTML = '';
         el.style.backgroundColor = 'rgb(14 165 233)'
       }
-      this.messageAction = 'Расставте корабли';
+      this.messageAction = 'Расставьте корабли';
       this.chat.enemyName = "";
       this.chat.enemyId = '';
 
