@@ -31,17 +31,17 @@ export class ChatComponent {
 
   arrDialog: Array<Array<string>> = [];
   constructor() {
-    
-    if (document.location.host === 'localhost:4200') {
+    this.socket = io();
+    /* if (document.location.host === 'localhost:3000') {
       this.socket = io('http://localhost:3000');
       
     } else {
-       this.socket = io('https://seabattleserv.herokuapp.com');
+       this.socket = io('https://seabattle.herokuapp.com');
     }
     this.socket.on("addExistingUsers", (users: { [key: string]: string }) => {
       Object.assign(this.usersObj, users);
       this.updateUsersArray();
-    });
+    }); */
 
     this.socket.on("addNewUser", (user: { [key: string]: string }) => {
       Object.assign(this.usersObj, user);
