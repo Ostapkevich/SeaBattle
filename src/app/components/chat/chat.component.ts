@@ -1,5 +1,5 @@
 import { Component, Output, EventEmitter, ViewChild, ElementRef, Input } from '@angular/core';
-import { io, Socket } from "socket.io-client";
+import { io} from "socket.io-client";
 
 @Component({
   selector: 'chat',
@@ -17,7 +17,8 @@ export class ChatComponent {
   // *** 
   usersObj: { [key: string]: string } = {}; //подключенные на сервере противники
   usersArray: any[] = []; // дублирует usersObj для построения шаблона HTML
-  socket: Socket;
+  socket:any;
+  //socket: Socket;
   myName: string = ''; // имя игрока 
   enemyName = ''; //имя выбранного врага для отображения в шаблоне HTML
   enemyId = ''; //id выбранного врага
@@ -30,22 +31,24 @@ export class ChatComponent {
 
   arrDialog: Array<Array<string>> = [];
   constructor() {
+    
     if (document.location.host === 'localhost:4200') {
       this.socket = io('http://localhost:3000');
+      
     } else {
-      this.socket = io('https://seabattleserv.herokuapp.com');
+       this.socket = io('https://seabattleserv.herokuapp.com');
     }
-    this.socket.on("addExistingUsers", (users) => {
+    this.socket.on("addExistingUsers", (users: { [key: string]: string }) => {
       Object.assign(this.usersObj, users);
       this.updateUsersArray();
     });
 
-    this.socket.on("addNewUser", (user) => {
+    this.socket.on("addNewUser", (user: { [key: string]: string }) => {
       Object.assign(this.usersObj, user);
       this.updateUsersArray();
     });
 
-    this.socket.on('inviteToPlay', (senderId) => {
+    this.socket.on('inviteToPlay', (senderId:string) => {
 
       function soundInvite() {
         var audio = new Audio();
@@ -102,7 +105,7 @@ export class ChatComponent {
       }
     });
 
-    this.socket.on('invitationResponse', (id, acceptDialog) => {
+    this.socket.on('invitationResponse', (id:string, acceptDialog:string) => {
       if (acceptDialog === '1') {
         clearInterval(this.intv);
         this.timeInvite = '';
@@ -126,7 +129,7 @@ export class ChatComponent {
       }
     });
 
-    this.socket.on('statusTwoPlayersBusy', (id1, id2) => {
+    this.socket.on('statusTwoPlayersBusy', (id1:string, id2:string) => {
       if (Object.hasOwn(this.usersObj, id1)) { this.usersObj[id1] = this.usersObj[id1].replace('🟢', '🔵'); }
       if (Object.hasOwn(this.usersObj, id2)) { this.usersObj[id2] = this.usersObj[id2].replace('🟢', '🔵'); }
       this.updateUsersArray();
@@ -136,12 +139,12 @@ export class ChatComponent {
       }
     })
 
-    this.socket.on('mePlayMarkFalse', (id) => {
+    this.socket.on('mePlayMarkFalse', (id:string) => {
       this.usersObj[id] = this.usersObj[id].replace('🔵', '🟢');
       this.updateUsersArray();
     });
 
-    this.socket.on('quitUser', (id) => {
+    this.socket.on('quitUser', (id:string) => {
       delete this.usersObj[id];
       this.updateUsersArray();
       if (this.block && this.enemyId === id) {
@@ -157,7 +160,7 @@ export class ChatComponent {
 
     });
 
-    this.socket.on('messageToUser', (idFrom, between, usrMessage, idMessage) => {
+    this.socket.on('messageToUser', (idFrom:string, between:string, usrMessage:string, idMessage:string) => {
       this.socket.emit('gotAnswer', idFrom, between, usrMessage, idMessage, (response: { status: string }) => {
         if (response.status === 'ok') {
           this.arrDialog.unshift([idFrom, between, usrMessage, '1', idMessage]);
@@ -170,7 +173,7 @@ export class ChatComponent {
       });
     });
 
-    this.socket.on('gotAnswer', (between, usrMessage, idMessage) => {
+    this.socket.on('gotAnswer', (between:string, usrMessage:string, idMessage:string) => {
       for (const dialog of this.arrDialog) {
         if (dialog[4] === idMessage) {
           dialog[3] = '2';

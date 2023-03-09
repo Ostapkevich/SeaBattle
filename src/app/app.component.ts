@@ -135,7 +135,7 @@ export class AppComponent implements AfterViewInit {
     window.document.addEventListener('keydown', this.canselMove.bind(this));
     window.document.addEventListener('wheel', this.rotate.bind(this));
 
-    this.chat.socket.on('shot', (coord: string, callback) => {
+    this.chat.socket.on('shot', (coord: string, callback:Function) => {
       let findResult = this.catchShot(coord);
       let element: HTMLDivElement = this.squere1Element.querySelector('#' + coord);
       element.innerHTML = '🔵';
