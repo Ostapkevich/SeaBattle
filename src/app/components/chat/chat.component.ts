@@ -244,7 +244,10 @@ export class ChatComponent {
 
   createUser() {
     if (this.inpName.nativeElement.disabled === false && this.inpName.nativeElement.value !== '') {
-      this.socket.emit('createNewUser', this.myName, (response: { status: string }, users: Object) => {
+      this.socket.timeout(5000).emit('createNewUser', this.myName, (err:Error,response: { status: string }, users: Object) => {
+        if (err) {
+          alert(err.message)
+        }
         if (response.status === "ok") {
           Object.assign(this.usersObj, users);
           this.updateUsersArray();
