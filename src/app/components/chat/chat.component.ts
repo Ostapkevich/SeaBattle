@@ -1,5 +1,5 @@
 import { Component, Output, EventEmitter, ViewChild, ElementRef, Input } from '@angular/core';
-import { io} from "socket.io-client";
+//import { io} from "socket.io-client";
 
 @Component({
   selector: 'chat',
@@ -31,7 +31,7 @@ export class ChatComponent {
 
   arrDialog: Array<Array<string>> = [];
   constructor() {
-    this.socket = io();
+    this.socket=global.io();
     /* if (document.location.host === 'localhost:3000') {
       this.socket = io('http://localhost:3000');
       
