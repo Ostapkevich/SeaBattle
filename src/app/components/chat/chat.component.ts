@@ -1,5 +1,5 @@
 import { Component, Output, EventEmitter, ViewChild, ElementRef, Input } from '@angular/core';
-import { io} from "socket.io-client";
+//import { io} from "socket.io-client";
 
 @Component({
   selector: 'chat',
