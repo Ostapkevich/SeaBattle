@@ -10,8 +10,8 @@ const io = new Server(httpServer);
 //app.use(express.static(__dirname + '/dist/sea-battle'));
 app.get('/', function(req,res) {
     
-//res.sendFile(path.join(__dirname+'/dist/sea-battle/indext.html'));
-res.sendFile(path.join(__dirname+'/test.html'));
+res.sendFile(path.join(__dirname+'/dist/sea-battle/index.html'));
+//res.sendFile(path.join(__dirname+'/test.html'));
 });
 
 let users={};
