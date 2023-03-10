@@ -18,7 +18,6 @@ export class ChatComponent {
   usersObj: { [key: string]: string } = {}; //подключенные на сервере противники
   usersArray: any[] = []; // дублирует usersObj для построения шаблона HTML
   socket:any;
-  //socket: Socket;
   myName: string = ''; // имя игрока 
   enemyName = ''; //имя выбранного врага для отображения в шаблоне HTML
   enemyId = ''; //id выбранного врага
@@ -32,17 +31,7 @@ export class ChatComponent {
   arrDialog: Array<Array<string>> = [];
   constructor() {
     this.socket=io();
-    /* if (document.location.host === 'localhost:3000') {
-      this.socket = io('http://localhost:3000');
-      
-    } else {
-       this.socket = io('https://seabattle.herokuapp.com');
-    }
-    this.socket.on("addExistingUsers", (users: { [key: string]: string }) => {
-      Object.assign(this.usersObj, users);
-      this.updateUsersArray();
-    }); */
-
+    
     this.socket.on("addNewUser", (user: { [key: string]: string }) => {
       Object.assign(this.usersObj, user);
       this.updateUsersArray();

@@ -10,8 +10,27 @@
 </head>
 
 <body style="background-color: #111827;">
-
   <app-root></app-root>
+  <script src="./assets/socket.io.esm.min.js" ></script>
+ 
+
+  <script >
+   
+  
+    const socke = io();
+    console.dir('io',socke);
+    this.socke.timeout(5000).emit('createNewUser', this.myName, (err,response, users) => {
+        if (err) {
+          alert(err.message)
+        }
+        if (response.status === "ok") {
+         alert(users);
+        } else {
+          alert(response.status);
+        }
+      });
+  </script>
+ 
 </body>
 
 </html>

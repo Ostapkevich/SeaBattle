@@ -6,24 +6,12 @@ const { Server } = require("socket.io");
 const app = express();
 
 const httpServer = createServer(app);
-/* let originHost;
-if (process.env.PORT) {
-  originHost = 'https://seabattle.herokuapp.com';
-} else {
-  originHost = "http://localhost:3000";
-}
-
-const io = new Server(httpServer, {
-  cors: {
-    origin: originHost,
-    methods: ["GET", "POST"]
-  }
-}); */
 const io = new Server(httpServer);
-app.use(express.static(__dirname + '/dist/sea-battle'));
-app.get('/*', function(req,res) {
+//app.use(express.static(__dirname + '/dist/sea-battle'));
+app.get('/', function(req,res) {
     
-res.sendFile(path.join(__dirname+'/dist/sea-battle/index.html'));
+//res.sendFile(path.join(__dirname+'/dist/sea-battle/indext.html'));
+res.sendFile(path.join(__dirname+'/test.html'));
 });
 
 let users={};
@@ -139,4 +127,3 @@ io.on("connection", (socket) => {
 
 const PORT = process.env.PORT || 3000;
 httpServer.listen(PORT, () => { console.log('Server is running!') });
-//app.listen(process.env.PORT || 3000);
