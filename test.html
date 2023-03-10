@@ -18,6 +18,7 @@
       console.dir(socket);
       socket.emit('createNewUser', this.myName,(response, users) => {
          alert('2');
+         console.log('2');
           if (response.status === "ok") {
            alert(response.status);
           } else {
