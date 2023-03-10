@@ -16,8 +16,8 @@
     
       const socket = io();
       console.dir(socket);
-      socket.timeout(5000).emit('createNewUser', this.myName,(err,response, users) => {
-         
+      socket.emit('createNewUser', this.myName,(response, users) => {
+         alert('2');
           if (response.status === "ok") {
            alert(response.status);
           } else {

@@ -33,7 +33,7 @@ io.on("connection", (socket) => {
 
   socket.on("createNewUser", (name, callback) => {
     try {
-      callback({ status: "ok" }, users);
+      callback({status: "ok" }, users);
       Object.assign(users, { [socket.id]: name + '🟢' });
       socket.broadcast.emit('addNewUser', { [socket.id]: name + '🟢' });
     } catch (error) {
