@@ -17,7 +17,18 @@
   <script>
     const socket = io();
     console.dir(socket);
-   
+    socket.emit('createNewUser', this.myName, (response, users) => {
+      alert('2');
+      console.log('2');
+      if (response.status === "ok") {
+        console.log('3');
+        console.log(response.status)
+        alert('3');
+        alert(response.status);
+      } else {
+        alert(response.status);
+      }
+    });
   </script>
 
   <app-root></app-root>
