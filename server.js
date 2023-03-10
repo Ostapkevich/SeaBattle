@@ -11,7 +11,6 @@ app.use(express.static(__dirname + '/dist/sea-battle'));
 app.get('/', function(req,res) {
     
 res.sendFile(path.join(__dirname+'/dist/sea-battle/index.html'));
-//res.sendFile(path.join(__dirname+'/test.html'));
 });
 
 let users={};
@@ -88,7 +87,7 @@ io.on("connection", (socket) => {
   socket.on('gotAnswer', (idFrom, between, usrMessage, idMessage, callback) => {
     try {
       callback({ status: "ok" });
-      io.to(idFrom).emit('gotAnswer', between, usrMessage, idMessage);
+      io.to(idFrom).emit('gotAnswer', idMessage);
     } catch (error) {
       callback({ status: error.message });
     }

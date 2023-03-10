@@ -1,5 +1,4 @@
 import { Component, Output, EventEmitter, ViewChild, ElementRef, Input } from '@angular/core';
-//import { io} from "socket.io-client";
 
 @Component({
   selector: 'chat',
@@ -162,7 +161,7 @@ export class ChatComponent {
       });
     });
 
-    this.socket.on('gotAnswer', (between:string, usrMessage:string, idMessage:string) => {
+    this.socket.on('gotAnswer', (idMessage:string) => {
       for (const dialog of this.arrDialog) {
         if (dialog[4] === idMessage) {
           dialog[3] = '2';
