@@ -31,6 +31,11 @@ export class ChatComponent {
   constructor() {
     this.socket=io();
     
+    this.socket.on("addExistingUsers", (users: any) => {
+      Object.assign(this.usersObj, users);
+      this.updateUsersArray();
+    });
+
     this.socket.on("addNewUser", (user: { [key: string]: string }) => {
       Object.assign(this.usersObj, user);
       this.updateUsersArray();
