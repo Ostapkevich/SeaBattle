@@ -135,7 +135,7 @@ export class AppComponent implements AfterViewInit {
     window.document.addEventListener('keydown', this.canselMove.bind(this));
     window.document.addEventListener('wheel', this.rotate.bind(this));
 
-    this.chat.socket.on('shot', (coord: string, callback:Function) => {
+    this.chat.socket.on('shot', (coord: string, callback: Function) => {
       let findResult = this.catchShot(coord);
       let element: HTMLDivElement = this.squere1Element.querySelector('#' + coord);
       element.innerHTML = '🔵';
@@ -193,6 +193,7 @@ export class AppComponent implements AfterViewInit {
           elem.style.borderColor = 'rgb(150,0,0)'
           elem.style.borderWidth = '3px';
           break;
+
       }
     }
   }
@@ -231,7 +232,6 @@ export class AppComponent implements AfterViewInit {
             this.returnedShipId[0] = this.trackingShipId[0];
             this.returnedShipId[1] = this.trackingShipId[1];
             this.returnedDirection = ship.direction;
-            // this.outOfShips.length = 0;
             this.createExcludeShipsArray();
             this.changeShipStyle(this.getShipById(this.trackingShipId), 'colorSelectedShip');
             this.changeShipStyle(this.getShipById(this.trackingShipId), 'unselectBorder');
@@ -458,7 +458,7 @@ export class AppComponent implements AfterViewInit {
       }
       let coord: string = element.id;
       if (coord === 'battleField') { return; }
-      this.chat.socket.timeout(30000).emit('shot', this.chat.enemyId, coord.replace('p', 'c'), (err: Error, response: { foundCoord: boolean, gameСontinue: boolean, shipAlive: boolean, errorMessage: string }) => {
+      this.chat.socket.timeout(30000).emit('shot', this.chat.enemyId, coord.replace('p', 'c'), (err: Error, response: { foundCoord: boolean, gameСontinue: boolean, shipAlive: boolean, ship: Ship, errorMessage?: string }) => {
         if (err) {
           alert('Проблемы с интернет соединением или удаленный сервер не доступен! ' + err.message)
         } else if (response.errorMessage) {
@@ -467,15 +467,28 @@ export class AppComponent implements AfterViewInit {
           element.innerHTML = '🔴';
           if (response.foundCoord === true) {
             if (response.gameСontinue === true) {
-              element.style.backgroundColor = '#265369';
               if (response.shipAlive) {
+                element.style.backgroundColor = '#265369';
                 this.sound('popadanie');
               } else {
+                for (let index = 0; index < response.ship.shipCount; index++) {
+                  let id: string = Ship.getDivId(response.ship, index).replace('c', 'p');
+                  let elnt = document.getElementById(id);
+                  if (elnt) {
+                    elnt.style.backgroundColor = 'rgb(105,10,14)';
+                  }
+                }
+                
                 this.sound('vzryiv');
               }
-
             } else {
-              element.style.backgroundColor = '#265369';
+              for (let index = 0; index < response.ship.shipCount; index++) {
+                let id: string = Ship.getDivId(response.ship, index).replace('c', 'p');
+                let elnt = document.getElementById(id);
+                if (elnt) {
+                  elnt.style.backgroundColor = 'rgb(105,10,14)';
+                }
+              }
               this.canShot = false;
               this.messageAction = 'Вы выиграли';
               this.update();
@@ -492,7 +505,8 @@ export class AppComponent implements AfterViewInit {
     }
   }
 
-  catchShot(coord: string): { foundCoord: boolean, gameСontinue: boolean, shipAlive: boolean } {
+  catchShot(coord: string): { foundCoord: boolean, gameСontinue: boolean, shipAlive: boolean, ship?: Ship } {
+    let returnedShip!: Ship;
     let fCoord: boolean = false;
     let gСontinue: boolean = false;
     let isAlive: boolean = true;
@@ -503,6 +517,7 @@ export class AppComponent implements AfterViewInit {
           if (id === coord) {
 
             fCoord = true;
+            returnedShip = ship;
             switch (index) {
               case 0:
                 ship[1] = false;
@@ -564,7 +579,12 @@ export class AppComponent implements AfterViewInit {
         }
       }
     }
-    return { foundCoord: fCoord, gameСontinue: gСontinue, shipAlive: isAlive };
+    if (fCoord && isAlive === false) {
+      return { foundCoord: fCoord, gameСontinue: gСontinue, shipAlive: isAlive, ship: returnedShip };
+    } else {
+      return { foundCoord: fCoord, gameСontinue: gСontinue, shipAlive: isAlive };
+    }
+
   }
   i = 5;
   update() {

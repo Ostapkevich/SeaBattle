@@ -305,34 +305,38 @@ export class ChatComponent {
   sendMessage(event: KeyboardEvent) {
     this.playerSelectElnt = this.slctPlayer.nativeElement;
     if (event.code === 'Enter') {
-      if (this.playerSelectElnt.selectedIndex >= 0) {
-        let name2: string = this.usersArray[this.playerSelectElnt.selectedIndex][1];
-        name2 = name2.slice(0, name2.length - 2);
-        let between: string = this.myName + '-' + name2;
-        let usrMessage: string = this.inpMsg.nativeElement.value;
-        this.inpMsg.nativeElement.disabled = true;
-        let idMessage = String(Math.random());
-        this.socket.timeout(30000).emit('messageToServer', this.playerSelectElnt.value, between, usrMessage, idMessage, (err: Error, response: { status: string }) => {
-          if (err) {
-            this.inpMsg.nativeElement.disabled = false;
-            alert('Сообщение не доставлено. Возможно проблемы с интернет соединением или удаленный сервер не доступен. ' + err.message);
-          } else {
-            if (response.status == "ok") {
-              this.inpMsg.nativeElement.disabled = false;
-              this.inpMsg.nativeElement.value = '';
-              this.arrDialog.unshift([this.socket.id, between, usrMessage, '1', idMessage]);
-            } else {
-              this.inpMsg.nativeElement.disabled = false;
-              alert('Сообщение не доставлено. ' + response.status);
-            }
-          }
-        });
-      } else {
-        alert('Выберите имя игрока.')
-      }
+     this.sendMsg();
     }
 
   }
+
+sendMsg(){
+  if (this.playerSelectElnt.selectedIndex >= 0) {
+    let name2: string = this.usersArray[this.playerSelectElnt.selectedIndex][1];
+    name2 = name2.slice(0, name2.length - 2);
+    let between: string = this.myName + '-' + name2;
+    let usrMessage: string = this.inpMsg.nativeElement.value;
+    this.inpMsg.nativeElement.disabled = true;
+    let idMessage = String(Math.random());
+    this.socket.timeout(30000).emit('messageToServer', this.playerSelectElnt.value, between, usrMessage, idMessage, (err: Error, response: { status: string }) => {
+      if (err) {
+        this.inpMsg.nativeElement.disabled = false;
+        alert('Сообщение не доставлено. Возможно проблемы с интернет соединением или удаленный сервер не доступен. ' + err.message);
+      } else {
+        if (response.status == "ok") {
+          this.inpMsg.nativeElement.disabled = false;
+          this.inpMsg.nativeElement.value = '';
+          this.arrDialog.unshift([this.socket.id, between, usrMessage, '1', idMessage]);
+        } else {
+          this.inpMsg.nativeElement.disabled = false;
+          alert('Сообщение не доставлено. ' + response.status);
+        }
+      }
+    });
+  } else {
+    alert('Выберите имя игрока.')
+  }
+}
 
   changePlayer() {
     this.playerSelectElnt = this.slctPlayer.nativeElement;
