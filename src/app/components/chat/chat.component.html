@@ -1,35 +1,35 @@
-<div class="grid  grid-cols-4 lg:grid-cols-2 gap-x-4 sm:gap-x-7 md:gap-x-10 lg:gap-x-2.5 gap-2.5 ">
-    <label for="small-input" class="order-0 lg:order-0 text-sm font-medium  text-white">Ваше имя
+<div class="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-2 gap-x-4 sm:gap-x-7 md:gap-x-10 lg:gap-x-2.5 gap-2.5 ">
+    <label for="small-input" class="order-0 text-sm font-medium  text-white">Ваше имя
     </label>
-    <label for="order-1 lg:order-1 countries_multiple" class="text-sm font-medium  text-white">Игроки
+    <label for="order-1 countries_multiple" class="text-sm font-medium  text-white">Игроки
     </label>
     <input #inpName [(ngModel)]="myName" (keydown)="inpNameEnter($event)" type="text" id=""
         placeholder="Введите имя и нажмите войти"
-        class="p-1.5 self-start order-4 lg:order-2 border rounded-lg sm:text-xs   bg-gray-700 border-gray-600 placeholder-gray-400 text-white focus:ring-blue-500 focus:border-blue-500">
+        class="p-1.5 self-start order-2 sm:order-4 lg:order-2 border rounded-lg sm:text-xs   bg-gray-700 border-gray-600 placeholder-gray-400 text-white focus:ring-blue-500 focus:border-blue-500">
     <select #selectPlayer multiple id="countries_multiple" (change)="changePlayer() " size="3"
-        class=" order-5 lg:order-3 overflow-auto  border0 text-xs rounded-lg bg-gray-700 border-gray-600 placeholder-gray-400 text-white focus:ring-blue-500 focus:border-blue-500">
+        class=" order-3 sm:order-5 lg:order-3 overflow-auto  border0 text-xs rounded-lg bg-gray-700 border-gray-600 placeholder-gray-400 text-white focus:ring-blue-500 focus:border-blue-500">
         <option *ngFor="let item of usersArray" [value]="item[0]">{{item[1]}} </option>
     </select>
 
     <button (click)="createUser()" type="button" id="name"
-        class="order-7 lg:order-4 text-xs font-medium text-center p-1.5 text-white bg-blue-700 rounded-lg  focus:ring-4 focus:outline-none  dark:bg-blue-600 hover:bg-blue-700 focus:ring-blue-800">
+        class="order-4 sm:order-7 lg:order-4 text-xs font-medium text-center p-1.5 text-white bg-blue-700 rounded-lg  focus:ring-4 focus:outline-none  dark:bg-blue-600 hover:bg-blue-700 focus:ring-blue-800">
         Войти
     </button>
     <button (click)="invatePlayer()" id="invate" type="button"
-        class="order-8 lg:order-5 text-xs font-medium text-center p-1.5 text-white rounded-lg  focus:ring-4 focus:outline-none  bg-blue-600 hover:bg-blue-700 focus:ring-blue-800">
+        class="order-5 sm:order-8 lg:order-5 text-xs font-medium text-center p-1.5 text-white rounded-lg  focus:ring-4 focus:outline-none  bg-blue-600 hover:bg-blue-700 focus:ring-blue-800">
         Пригласить
     </button>
 
-    <label for="small-input" class=" order-2 lg:order-6  text-sm font-medium  text-white">
+    <label for="small-input" class="order-6 sm:order-2 lg:order-6  text-sm font-medium  text-white">
      :{{messageTo}}
     </label>
-    <p class="order-3 lg:order-7 justify-self-center  text-sm font-normal text-white">
+    <p class="order-7 sm:order-3 lg:order-7 justify-self-center  text-sm font-normal text-white">
         {{timeInvite}}
     </p>
 
 
     <input #inpMessage placeholder="Текст сообщения" type="text" id="" (keydown)="sendMessage($event)"
-        class="self-start order-6 lg:order-8 col-span-2 p-1.5  border  rounded-lg  sm:text-xs  bg-gray-700 border-gray-600 placeholder-gray-400 text-white focus:ring-blue-500 focus:border-blue-500">
+        class="self-start order-8 sm:order-6 lg:order-8 col-span-2 p-1.5  border  rounded-lg  sm:text-xs  bg-gray-700 border-gray-600 placeholder-gray-400 text-white focus:ring-blue-500 focus:border-blue-500">
 
 
     <label class="order-9  text-sm font-medium  text-white">Ваш диалог
@@ -39,7 +39,7 @@
         Отправить
     </button>
     <ul
-        class="order-12 h-40 sm:h-44 md:h-40 lg:h-44 xl:h-52 2xl:h-64 lg:order-10 col-span-2 overflow-auto  text-xs font-normal  border  rounded-lg bg-gray-700 border-gray-600 text-white">
+        class="order-10 sm:order-12 h-40 sm:h-44 md:h-40 lg:h-44 xl:h-52 2xl:h-64 lg:order-10 col-span-2 overflow-auto  text-xs font-normal  border  rounded-lg bg-gray-700 border-gray-600 text-white">
         <ng-container *ngFor="let item of arrDialog">
             <li [ngClass]="{myMessageOk:true}" class="flex"
                 *ngIf="socket.id===item[0].substring(0,socket.id.length) && item[3]==='2'">
@@ -54,7 +54,7 @@
         </ng-container>
     </ul>
 
-    <p class="order-11 lg:order-12 col-span-2 text-xs text-white">Расставьте корабли на левом поле, добавте свое имя,
+    <p class="order-12 sm:order-11 lg:order-12 col-span-2 text-xs text-white">Расставьте корабли на левом поле, добавте свое имя,
         пригласите игрока для игры или ждите приглашение. 
         Поворот корабля выполняется с помощью колеса мыши относительно выделенной части карабля. Из горизонтального
         положения в вертикальное поворот выполняется по часовой стрелке, наоборот - против.
