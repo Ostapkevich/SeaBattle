@@ -84,6 +84,11 @@ io.on("connection", (socket) => {
     }
   });
 
+  socket.on('printing',(idTo)=>{
+    console.log('printing')
+    io.to(idTo).emit('printing',socket.id);
+  });
+
   socket.on('gotAnswer', (idFrom, between, usrMessage, idMessage, callback) => {
     try {
       callback({ status: "ok" });

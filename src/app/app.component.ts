@@ -123,7 +123,7 @@ export class AppComponent implements AfterViewInit {
 
 
   ngAfterViewInit(): void {
-    this.squere1Element = this.squareRef?.nativeElement;
+       this.squere1Element = this.squareRef?.nativeElement;
     this.squere2Element = this.square2Ref?.nativeElement;
     for (const ship of this.ships) {
       this.changeShipStyle(ship, 'colorShip');

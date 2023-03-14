@@ -1,4 +1,4 @@
-import { Component, Output, EventEmitter, ViewChild, ElementRef, Input } from '@angular/core';
+import { Component, Output, EventEmitter, ViewChild, ElementRef, Input, AfterViewChecked } from '@angular/core';
 
 @Component({
   selector: 'chat',
@@ -6,7 +6,7 @@ import { Component, Output, EventEmitter, ViewChild, ElementRef, Input } from '@
   styleUrls: ['./chat.component.css'],
 
 })
-export class ChatComponent {
+export class ChatComponent implements AfterViewChecked {
   // *** переменные для окна приглашения ***
   messageDialog: string = '';  // содержание строки приглашения в окне приглашения
   hiddenDialog = true;  // отображение видимости окна приглашения
@@ -16,7 +16,7 @@ export class ChatComponent {
   // *** 
   usersObj: { [key: string]: string } = {}; //подключенные на сервере противники
   usersArray: any[] = []; // дублирует usersObj для построения шаблона HTML
-  socket:any;
+  socket: any;
   myName: string = ''; // имя игрока 
   enemyName = ''; //имя выбранного врага для отображения в шаблоне HTML
   enemyId = ''; //id выбранного врага
@@ -26,11 +26,22 @@ export class ChatComponent {
   timeInvite = "";
   intv: any;
   aud: any;
-
+  scroll = 20
   arrDialog: Array<Array<string>> = [];
   constructor() {
-    this.socket=io();
-    
+    this.socket = io();
+
+    this.socket.on('printing', (idFrom: string) => {
+      if (idFrom === this.playerSelectElnt.value) {
+        let lbl: any;
+        lbl = document.getElementById('lblPrint');
+        lbl.innerText = ':' + this.playerSelectElnt.value + '<i> печатает</i> ';
+        setTimeout(() => {
+          lbl.innerText = ':' + this.playerSelectElnt.value
+        }, 500);
+      }
+    })
+
     this.socket.on("addExistingUsers", (users: any) => {
       Object.assign(this.usersObj, users);
       this.updateUsersArray();
@@ -41,7 +52,7 @@ export class ChatComponent {
       this.updateUsersArray();
     });
 
-    this.socket.on('inviteToPlay', (senderId:string) => {
+    this.socket.on('inviteToPlay', (senderId: string) => {
 
       function soundInvite() {
         var audio = new Audio();
@@ -98,7 +109,7 @@ export class ChatComponent {
       }
     });
 
-    this.socket.on('invitationResponse', (id:string, acceptDialog:string) => {
+    this.socket.on('invitationResponse', (id: string, acceptDialog: string) => {
       if (acceptDialog === '1') {
         clearInterval(this.intv);
         this.timeInvite = '';
@@ -122,7 +133,7 @@ export class ChatComponent {
       }
     });
 
-    this.socket.on('statusTwoPlayersBusy', (id1:string, id2:string) => {
+    this.socket.on('statusTwoPlayersBusy', (id1: string, id2: string) => {
       if (Object.hasOwn(this.usersObj, id1)) { this.usersObj[id1] = this.usersObj[id1].replace('🟢', '🔵'); }
       if (Object.hasOwn(this.usersObj, id2)) { this.usersObj[id2] = this.usersObj[id2].replace('🟢', '🔵'); }
       this.updateUsersArray();
@@ -132,12 +143,12 @@ export class ChatComponent {
       }
     })
 
-    this.socket.on('mePlayMarkFalse', (id:string) => {
+    this.socket.on('mePlayMarkFalse', (id: string) => {
       this.usersObj[id] = this.usersObj[id].replace('🔵', '🟢');
       this.updateUsersArray();
     });
 
-    this.socket.on('quitUser', (id:string) => {
+    this.socket.on('quitUser', (id: string) => {
       delete this.usersObj[id];
       this.updateUsersArray();
       if (this.block && this.enemyId === id) {
@@ -153,10 +164,10 @@ export class ChatComponent {
 
     });
 
-    this.socket.on('messageToUser', (idFrom:string, between:string, usrMessage:string, idMessage:string) => {
+    this.socket.on('messageToUser', (idFrom: string, between: string, usrMessage: string, idMessage: string) => {
       this.socket.emit('gotAnswer', idFrom, between, usrMessage, idMessage, (response: { status: string }) => {
         if (response.status === 'ok') {
-          this.arrDialog.unshift([idFrom, between, usrMessage, '1', idMessage]);
+          this.arrDialog.push([idFrom, between, usrMessage, '1', idMessage]);
           var audio = new Audio();
           audio.src = './assets/message.mp3';
           audio.autoplay = true;
@@ -166,7 +177,7 @@ export class ChatComponent {
       });
     });
 
-    this.socket.on('gotAnswer', (idMessage:string) => {
+    this.socket.on('gotAnswer', (idMessage: string) => {
       for (const dialog of this.arrDialog) {
         if (dialog[4] === idMessage) {
           dialog[3] = '2';
@@ -177,6 +188,12 @@ export class ChatComponent {
 
 
   }
+  ngAfterViewChecked(): void {
+    let uList: any;
+    uList = document.getElementById('msgUl');
+    uList.scrollTop = uList.scrollHeight;
+  }
+
   @Input() chatDesc: any;
 
   @ViewChild("inpMessage", { static: false })
@@ -237,7 +254,7 @@ export class ChatComponent {
 
   createUser() {
     if (this.inpName.nativeElement.disabled === false && this.inpName.nativeElement.value !== '') {
-      this.socket.timeout(5000).emit('createNewUser', this.myName, (err:Error,response: { status: string }, users: Object) => {
+      this.socket.timeout(5000).emit('createNewUser', this.myName, (err: Error, response: { status: string }, users: Object) => {
         if (err) {
           alert(err.message)
         }
@@ -309,42 +326,54 @@ export class ChatComponent {
 
   sendMessage(event: KeyboardEvent) {
     this.playerSelectElnt = this.slctPlayer.nativeElement;
+    
     if (event.code === 'Enter') {
-     this.sendMsg();
+      this.sendMsg();
+    } else if(event.code !== 'Enter'){
+      
+        this.socket.emit('printing', this.playerSelectElnt.value);
+      
     }
 
   }
 
-sendMsg(){
-  if (this.playerSelectElnt.selectedIndex >= 0) {
-    let name2: string = this.usersArray[this.playerSelectElnt.selectedIndex][1];
-    name2 = name2.slice(0, name2.length - 2);
-    let between: string = this.myName + '-' + name2;
-    let usrMessage: string = this.inpMsg.nativeElement.value;
-    this.inpMsg.nativeElement.disabled = true;
-    let idMessage = String(Math.random());
-    this.socket.timeout(30000).emit('messageToServer', this.playerSelectElnt.value, between, usrMessage, idMessage, (err: Error, response: { status: string }) => {
-      if (err) {
-        this.inpMsg.nativeElement.disabled = false;
-        alert('Сообщение не доставлено. Возможно проблемы с интернет соединением или удаленный сервер не доступен. ' + err.message);
-      } else {
-        if (response.status == "ok") {
+  sendMsg() {
+    if (this.playerSelectElnt.selectedIndex >= 0) {
+      let name2: string = this.usersArray[this.playerSelectElnt.selectedIndex][1];
+      name2 = name2.slice(0, name2.length - 2);
+      let between: string = this.myName + '-' + name2;
+      let usrMessage: string = this.inpMsg.nativeElement.value;
+      this.inpMsg.nativeElement.disabled = true;
+      let idMessage = String(Math.random());
+      this.socket.timeout(30000).emit('messageToServer', this.playerSelectElnt.value, between, usrMessage, idMessage, (err: Error, response: { status: string }) => {
+        if (err) {
           this.inpMsg.nativeElement.disabled = false;
-          this.inpMsg.nativeElement.value = '';
-          this.arrDialog.unshift([this.socket.id, between, usrMessage, '1', idMessage]);
+          alert('Сообщение не доставлено. Возможно проблемы с интернет соединением или удаленный сервер не доступен. ' + err.message);
         } else {
-          this.inpMsg.nativeElement.disabled = false;
-          alert('Сообщение не доставлено. ' + response.status);
+          if (response.status == "ok") {
+            this.inpMsg.nativeElement.disabled = false;
+            this.inpMsg.nativeElement.value = '';
+            this.inpMsg.nativeElement.focus();
+            this.arrDialog.push([this.socket.id, between, usrMessage, '1', idMessage]);
+          } else {
+            this.inpMsg.nativeElement.disabled = false;
+            alert('Сообщение не доставлено. ' + response.status);
+          }
         }
-      }
-    });
-  } else {
-    alert('Выберите имя игрока.')
+      });
+    } else {
+      alert('Выберите имя игрока.')
+    }
   }
-}
 
   changePlayer() {
     this.playerSelectElnt = this.slctPlayer.nativeElement;
-    this.messageTo = ' ' + this.playerSelectElnt.item(this.playerSelectElnt.selectedIndex)?.innerHTML;
+    const n = this.playerSelectElnt.selectedIndex;
+    if (n >= 0) {
+      this.messageTo = ' ' + this.playerSelectElnt.item(n)?.innerHTML;
+    }
+
   }
+
+
 }
