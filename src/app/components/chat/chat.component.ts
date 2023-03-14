@@ -1,4 +1,4 @@
-import { Component, Output, EventEmitter, ViewChild, ElementRef, Input, AfterViewChecked } from '@angular/core';
+import { Component, Output, EventEmitter, ViewChild, ElementRef, Input, AfterViewChecked, AfterViewInit } from '@angular/core';
 
 @Component({
   selector: 'chat',
@@ -6,7 +6,7 @@ import { Component, Output, EventEmitter, ViewChild, ElementRef, Input, AfterVie
   styleUrls: ['./chat.component.css'],
 
 })
-export class ChatComponent implements AfterViewChecked {
+export class ChatComponent implements AfterViewChecked, AfterViewInit {
   // *** переменные для окна приглашения ***
   messageDialog: string = '';  // содержание строки приглашения в окне приглашения
   hiddenDialog = true;  // отображение видимости окна приглашения
@@ -26,18 +26,16 @@ export class ChatComponent implements AfterViewChecked {
   timeInvite = "";
   intv: any;
   aud: any;
-  scroll = 20
   arrDialog: Array<Array<string>> = [];
+  lblInput!: any;
+
   constructor() {
     this.socket = io();
-
     this.socket.on('printing', (idFrom: string) => {
       if (idFrom === this.playerSelectElnt.value) {
-        let lbl: any;
-        lbl = document.getElementById('lblPrint');
-        lbl.innerText = ':' + this.playerSelectElnt.value + '<i> печатает</i> ';
+        this.lblInput.innerHTML = ':' + this.usersArray[this.playerSelectElnt.selectedIndex][1] + 'печатает';
         setTimeout(() => {
-          lbl.innerText = ':' + this.playerSelectElnt.value
+          this.lblInput.innerHTML = ':' + this.usersArray[this.playerSelectElnt.selectedIndex][1];
         }, 500);
       }
     })
@@ -194,7 +192,12 @@ export class ChatComponent implements AfterViewChecked {
     uList.scrollTop = uList.scrollHeight;
   }
 
+  ngAfterViewInit(): void {
+    this.lblInput = document.getElementById('lblPrint');
+  }
+
   @Input() chatDesc: any;
+
 
   @ViewChild("inpMessage", { static: false })
   inpMsg!: ElementRef;
@@ -326,15 +329,11 @@ export class ChatComponent implements AfterViewChecked {
 
   sendMessage(event: KeyboardEvent) {
     this.playerSelectElnt = this.slctPlayer.nativeElement;
-    
     if (event.code === 'Enter') {
       this.sendMsg();
-    } else if(event.code !== 'Enter'){
-      
-        this.socket.emit('printing', this.playerSelectElnt.value);
-      
+    } else {
+      this.socket.emit('printing', this.playerSelectElnt.value);
     }
-
   }
 
   sendMsg() {
