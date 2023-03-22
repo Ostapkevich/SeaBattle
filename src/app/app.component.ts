@@ -533,8 +533,8 @@ export class AppComponent implements AfterViewInit {
                 break;
             }
             //***подбит ли весь корабль**
-            for (let index = 0; index < ship.shipCount; index++) {
-              switch (index) {
+            for (let ind = 0; ind < ship.shipCount; ind++) {
+              switch (ind) {
                 case 0:
                   isAlive = ship[1];
                   break;
@@ -547,6 +547,9 @@ export class AppComponent implements AfterViewInit {
                 case 3:
                   isAlive = ship[4];
                   break;
+              }
+              if (isAlive) {
+                break;
               }
             }
             //***********/

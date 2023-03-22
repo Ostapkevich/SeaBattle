@@ -157,7 +157,12 @@ export class ChatComponent implements AfterViewChecked, AfterViewInit {
         this.onMyName.emit(this.myName + '🟢');
         this.socket.emit('mePlayMarkFalse');
         this.onMoveChange.emit('Расставьте корабли');
-        alert('Противник покинул игру.')
+        alert('Противник покинул игру.');
+        if (this.play) {
+          this.onUpdate.emit();
+        }
+       
+    
       }
 
     });
@@ -216,6 +221,8 @@ export class ChatComponent implements AfterViewChecked, AfterViewInit {
   @Output() shotChange = new EventEmitter<boolean>();
 
   @Output() onMyName = new EventEmitter<string>();
+
+  @Output() onUpdate=new EventEmitter;
 
   @Input() onMove: string = '';
   @Output() onMoveChange = new EventEmitter<string>();
